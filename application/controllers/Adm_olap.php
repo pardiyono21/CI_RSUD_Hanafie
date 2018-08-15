@@ -26,50 +26,54 @@ class Adm_olap extends CI_Controller {
 	}
 
 	public function proses_olap(){
-		if ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='') {
-			redirect(base_url('adm_olap_rawatinap'));
-		}elseif ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='informasi1') {
-			redirect(base_url('adm_olap_rawatinap/informasi1'));
-		}elseif ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='informasi2') {
-			redirect(base_url('adm_olap_rawatinap/informasi2'));
-		}elseif ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='informasi3') {
-			redirect(base_url('adm_olap_rawatinap/informasi3'));
-		}elseif ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='informasi4') {
-			redirect(base_url('adm_olap_rawatinap/informasi4'));
-		}elseif ($this->input->post('olap')=='rawat_inap' && $this->input->post('informasi')=='informasi5') {
-			redirect(base_url('adm_olap_rawatinap/informasi5'));
+		$olap=$this->input->get('olap');
+		$info=$this->input->get('informasi');
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		if ($olap=='rawat_inap' && $info=='') {
+			redirect(base_url('adm_olap_rawatinap?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_inap' && $info=='informasi1') {
+			redirect(base_url('adm_olap_rawatinap/informasi1?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_inap' && $info=='informasi2') {
+			redirect(base_url('adm_olap_rawatinap/informasi2?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_inap' && $info=='informasi3') {
+			redirect(base_url('adm_olap_rawatinap/informasi3?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_inap' && $info=='informasi4') {
+			redirect(base_url('adm_olap_rawatinap/informasi4?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_inap' && $info=='informasi5') {
+			redirect(base_url('adm_olap_rawatinap/informasi5?awal='.$awal.'&akhir='.$akhir.''));
 		}
 
-		elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='') {
-			redirect(base_url('adm_olap_rawatjalan'));
-		}elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='informasi1') {
-			redirect(base_url('adm_olap_rawatjalan/informasi1'));
-		}elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='informasi2') {
-			redirect(base_url('adm_olap_rawatjalan/informasi2'));
-		}elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='informasi3') {
-			redirect(base_url('adm_olap_rawatjalan/informasi3'));
-		}elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='informasi4') {
-			redirect(base_url('adm_olap_rawatjalan/informasi4'));
-		}elseif ($this->input->post('olap')=='rawat_jalan' && $this->input->post('informasi')=='informasi5') {
-			redirect(base_url('adm_olap_rawatjalan/informasi5'));
+		elseif ($olap=='rawat_jalan' && $info=='') {
+			redirect(base_url('adm_olap_rawatjalan?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_jalan' && $info=='informasi1') {
+			redirect(base_url('adm_olap_rawatjalan/informasi1?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_jalan' && $info=='informasi2') {
+			redirect(base_url('adm_olap_rawatjalan/informasi2?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_jalan' && $info=='informasi3') {
+			redirect(base_url('adm_olap_rawatjalan/informasi3?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_jalan' && $info=='informasi4') {
+			redirect(base_url('adm_olap_rawatjalan/informasi4?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='rawat_jalan' && $info=='informasi5') {
+			redirect(base_url('adm_olap_rawatjalan/informasi5?awal='.$awal.'&akhir='.$akhir.''));
 		}
 
-		elseif ($this->input->post('olap')=='penunjang_medis' && $this->input->post('informasi')=='') {
-			redirect(base_url('adm_olap_penunjangmedis'));
-		}elseif ($this->input->post('olap')=='penunjang_medis' && $this->input->post('informasi')=='informasi1') {
-			redirect(base_url('adm_olap_penunjangmedis/informasi1'));
+		elseif ($olap=='penunjang_medis' && $info=='') {
+			redirect(base_url('adm_olap_penunjangmedis?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='penunjang_medis' && $info=='informasi1') {
+			redirect(base_url('adm_olap_penunjangmedis/informasi1?awal='.$awal.'&akhir='.$akhir.''));
 		}
-		elseif ($this->input->post('olap')=='penunjang_medis' && $this->input->post('informasi')=='informasi2') {
-			redirect(base_url('adm_olap_penunjangmedis/informasi2'));
+		elseif ($olap=='penunjang_medis' && $info=='informasi2') {
+			redirect(base_url('adm_olap_penunjangmedis/informasi2?awal='.$awal.'&akhir='.$akhir.''));
 		}
-		elseif ($this->input->post('olap')=='penunjang_medis' && $this->input->post('informasi')=='informasi3') {
-			redirect(base_url('adm_olap_penunjangmedis/informasi3'));
+		elseif ($olap=='penunjang_medis' && $info=='informasi3') {
+			redirect(base_url('adm_olap_penunjangmedis/informasi3?awal='.$awal.'&akhir='.$akhir.''));
 		}
 
-		elseif ($this->input->post('olap')=='apotek' && $this->input->post('informasi')=='') {
-			redirect(base_url('adm_olap_apotek'));
-		}elseif ($this->input->post('olap')=='apotek' && $this->input->post('informasi')=='informasi1') {
-			redirect(base_url('adm_olap_apotek/informasi1'));
+		elseif ($olap=='apotek' && $info=='') {
+			redirect(base_url('adm_olap_apotek?awal='.$awal.'&akhir='.$akhir.''));
+		}elseif ($olap=='apotek' && $info=='informasi1') {
+			redirect(base_url('adm_olap_apotek/informasi1?awal='.$awal.'&akhir='.$akhir.''));
 		}
 
 		else{

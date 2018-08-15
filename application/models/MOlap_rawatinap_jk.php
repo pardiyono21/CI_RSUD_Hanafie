@@ -13,45 +13,57 @@ class MOlap_rawatinap_jk extends CI_Model {
 
 	public function pasien_2016_jk() //jumlah pasien berdsrkan jenis kelamin perbulan thn 2016
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk,"%b") tgl_masuk,COUNT(tgl_masuk) AS jml,
+	 	$query = $this->db2->select('DATE_FORMAT(tgl_masuk,"%b") tgl_masuk,COUNT(tgl_masuk) AS jml,
 	 								COUNT(CASE WHEN jenis_kelamin LIKE "%P%" THEN 1 END) AS jml_p,
 	 								COUNT(CASE WHEN jenis_kelamin LIKE "%L%" THEN 1 END) AS jml_l')
+	 					   ->join('dim_pasien','fact_rawat_inap.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat inap')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->like('tgl_masuk', '2016')
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('mid(tgl_masuk, 6, 2)')
 	 					   ->order_by('mid(tgl_masuk, 6, 2)')
-	 					   ->get('pasien');
+	 					   ->get('fact_rawat_inap');
 	  	return $query;
 	}
 
 	public function pasien_2017_jk() //jumlah pasien berdsrkan jenis kelamin perbulan thn 2017
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk,"%b") tgl_masuk,COUNT(tgl_masuk) AS jml,
+	 	$query = $this->db2->select('DATE_FORMAT(tgl_masuk,"%b") tgl_masuk,COUNT(tgl_masuk) AS jml,
 	 								COUNT(CASE WHEN jenis_kelamin LIKE "%P%" THEN 1 END) AS jml_p,
 	 								COUNT(CASE WHEN jenis_kelamin LIKE "%L%" THEN 1 END) AS jml_l')
+	 					   ->join('dim_pasien','fact_rawat_inap.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat inap')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->like('tgl_masuk', '2017')
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('mid(tgl_masuk, 6, 2)')
 	 					   ->order_by('mid(tgl_masuk, 6, 2)')
-	 					   ->get('pasien');
+	 					   ->get('fact_rawat_inap');
 	  	return $query;
 	}
 
 	public function chart_pasien() //chart pasien rawat inap berdsrkan jenis kelamin per bulan thn
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk,"%b %Y") tgl_masuk,COUNT(tgl_masuk) AS jml,
-	 								COUNT(CASE WHEN jenis_kelamin LIKE "%P%" THEN 1 END) AS jml_p,
-	 								COUNT(CASE WHEN jenis_kelamin LIKE "%L%" THEN 1 END) AS jml_l')
+	 	$query = $this->db2->select('jenis_kelamin, COUNT(jenis_kelamin) AS jml')
+	 					   ->join('dim_pasien','fact_rawat_inap.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat inap')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
-	 					   ->group_by('left(tgl_masuk, 7)')
-	 					   ->order_by('left(tgl_masuk, 7)')
-	 					   ->get('pasien');
+	 					   ->group_by('jenis_kelamin')
+	 					   ->get('fact_rawat_inap');
 	  	if ($query->num_rows() >= 1) {
 			return $query;
 		} else {
@@ -61,12 +73,22 @@ class MOlap_rawatinap_jk extends CI_Model {
 
 	// Total pasien 2016
 	public function all_pasien()
-	{	$jk = array('P', 'L');
-	 	$all_pasien = $this->db->select('COUNT(jenis_kelamin) AS all_pasien')
+	{	
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		$jk = array('P', 'L');
+	 	$all_pasien = $this->db2->select('COUNT(jenis_kelamin) AS all_pasien')
+	 					   ->join('dim_pasien','fact_rawat_inap.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat inap')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
-	 					   ->get('pasien');
-	  	return $all_pasien->row();
+	 					   ->get('fact_rawat_inap');
+	  	if ($all_pasien->row()->all_pasien >= 1) {
+			return $all_pasien->row();
+		} else {
+			return false;
+		}
 	}
 
 

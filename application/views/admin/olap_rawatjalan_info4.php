@@ -25,56 +25,53 @@
                         <div class="white-box">
                             
                             <div class="row">
-                                <form method="post" action="<?=base_url()?>adm_olap/proses_olap">
-                                <div class="col-sm-2 col-xs-12">
+                                <form method="GET" action="<?=base_url()?>adm_olap/proses_olap">
+                                <div class="col-sm-4 col-xs-12">
                                     <?php
                                     $olap=$this->input->get('olap');
                                     ?>
-                                   <label>Fakta</label>
-                                    <select class="form-control" name="olap" id="olap">
+                                   <label>Tabel Fakta</label>
+                                   <select class="form-control" name="olap" id="olap">
                                        <option value="">-Pilih-</option>
-                                       <option value="rawat_inap" <?=$olap=='rawat_inap' ? 'selected':''?>>Rawat Inap</option>
-                                       <option value="rawat_jalan" <?=$olap=='rawat_jalan' ? 'selected':''?>>Rawat Jalan</option>
-                                       <option value="penunjang_medis" <?=$olap=='penunjang_medis' ? 'selected':''?>>Penunjang Medis</option>
-                                       <option value="apotek" <?=$olap=='apotek' ? 'selected':''?>>Apotek</option>
-                                   </select><br><br>
-                                   <label>Informasi Berdasarkan</label>
+                                       <option value="rawat_inap" <?=$olap=='rawat_inap' ? 'selected':''?>>Fakta Rawat Inap</option>
+                                       <option value="rawat_jalan" <?=$olap=='rawat_jalan' ? 'selected':''?>>Fakta Rawat Jalan</option>
+                                       <option value="penunjang_medis" <?=$olap=='penunjang_medis' ? 'selected':''?>>Fakta Penunjang Medis</option>
+                                       <option value="apotek" <?=$olap=='apotek' ? 'selected':''?>>Fakta Apotek</option>
+                                   </select>
+                                   <br>
+                                   
+                                
+
+                                    <label>Tabel Dimensi</label>
                                     <span id="informasi">
                                         <select class="form-control" name="olap" id="olap" disabled>
                                            <option value="">-Pilih-</option>
                                        </select>
                                     </span>
-                                    <script type="text/javascript">
-                                        document.getElementById("olap").onchange = function()
-                                        {
+                                    <br>
+                                    <label>Rentang Waktu</label>
+                                    <input type="date" name="awal" class="form-control"><br>
+                                           
+                                     <input type="date" name="akhir" class="form-control">
+                                       
+                                    <br>
+                                    <button type="submit" class="btn btn-danger" id="submit" disabled data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing"><i class="fa fa-check"></i> Proses</button>
 
-                                            if(this.value === "rawat_inap")
-                                            {
-                                                document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>Keseluruhan</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Dokter</option><option value='informasi3'>Asuransi</option><option value='informasi4'>Kamar</option><option value='informasi5'>Penyakit</option></select>";
-                                                document.getElementById("submit").disabled=false;
-                                            }else if(this.value == "rawat_jalan")
-                                            {
-                                                document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>Keseluruhan</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Dokter</option><option value='informasi3'>Asuransi</option><option value='informasi4'>Kinik</option><option value='informasi5'>Penyakit</option></select>";
-                                                document.getElementById("submit").disabled=false;
-                                            }else if(this.value == "penunjang_medis")
-                                            {
-                                                document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>Keseluruhan</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Jenis Penunjang Medis</option><option value='informasi3'>Asuransi</option></select>";
-                                                document.getElementById("submit").disabled=false;
-                                            }else if(this.value == "apotek")
-                                            {
-                                                document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>Keseluruhan</option><option value='informasi1'>Pelayan Medik</option></select>";
-                                                document.getElementById("submit").disabled=false;
-                                            }else{
-                                                
-                                                document.getElementById("informasi").innerHTML="<select class='form-control' disabled><option value=''>-Pilih-</option></select>";
-                                                document.getElementById("submit").disabled=true;
-                                            }
-                                        };
-                                    </script>
+                                    <!-- <button type="submit" class="btn btn-success" id="submit" disabled> <i class="fa fa-check"></i> Proses</button> -->
                                 </div>
-                                <div class="col-sm-2 col-xs-12">
-                                    <label style="margin-bottom: 18px"></label><br>
-                                   <button type="submit" class="btn btn-success" id="submit" disabled> <i class="fa fa-check"></i> Proses</button>
+                                <script type="text/javascript">
+                                    $('.btn').on('click', function() {
+                                        var $this = $(this);
+                                      $this.button('loading');
+                                        setTimeout(function() {
+                                           $this.button('reset');
+                                       }, 80000000000000000);
+                                    });
+                                </script>
+
+                                <div class="col-sm-8 col-xs-12">
+                                    
+                                   
                                 </div>
                                 </form>
 
@@ -105,9 +102,12 @@
                                                                     <th width="100">Bulan </th>
                                                                     <th colspan="2" width="250">Jumlah Pasien Per Klinik </th>
                                                                 </tr>
+                                                                <?php 
+                                                                if (count($data_klinik2016)>0) {
+                                                                ?>
                                                                 <tr>
                                                                     <th width="60">
-                                                                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2016_jan" aria-expanded="true">Jan
+                                                                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2016_jan" aria-expanded="true">January
                                                                         <span class="fa fa-plus-circle buka1"></span>
                                                                         <span class="fa fa-minus-circle tutup1"></span></a></th>
                                                                     
@@ -133,19 +133,24 @@
                                                                     </th>
                                                                 </tr>
                                                                <?php 
-                                                                $bulan1=2;
-                                                                $bulan2=2;
-                                                                $bulan3=2;
+                                                                }
+                                                                $bulan1=1;
+                                                                $bulan2=1;
+                                                                $bulan3=1;
                                                                 foreach ($data_2016 as $key ) {
+                                                                    $bulan1++;
+                                                                    $bulan2++;
+                                                                    $bulan3++;
+                                                                    if (count($key)>0) {
                                                                     ?>
                                                                     <tr>
                                                                         <th width="60">
-                                                                            <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2016_<?=$bulan1++?>" aria-expanded="false"><?=date("F", mktime(0, 0, 0, $bulan2++, 10))?>
+                                                                            <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2016_<?=$bulan1?>" aria-expanded="false"><?=date("F", mktime(0, 0, 0, $bulan2, 10))?>
                                                                             <span class="fa fa-plus-circle buka1"></span>
                                                                             <span class="fa fa-minus-circle tutup1"></span></a>
                                                                         </th>
                                                                         <th>
-                                                                            <div id="collapse2016_<?=$bulan3++?>" class="collapse">
+                                                                            <div id="collapse2016_<?=$bulan3?>" class="collapse">
                                                                                 <table class="table-bordered-collapse">
                                                                                     <?php
                                                                                     foreach ($key as $val) {
@@ -165,7 +170,7 @@
 
                                                                     </tr>
                                                                 <?php
-                                                                        
+                                                                    } 
                                                                 }
                                                                 ?>
 
@@ -186,9 +191,12 @@
                                                                     <th width="100">Bulan </th>
                                                                     <th colspan="2" width="250">Jumlah Pasien Per Klinik </th>
                                                                 </tr>
+                                                                <?php 
+                                                                if (count($data_klinik2017)>0) {
+                                                                ?>
                                                                 <tr>
                                                                     <th width="60">
-                                                                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2017_jan" aria-expanded="false">Jan
+                                                                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2017_jan" aria-expanded="false">January
                                                                         <span class="fa fa-plus-circle buka1"></span>
                                                                         <span class="fa fa-minus-circle tutup1"></span></a></th>
                                                                     
@@ -214,19 +222,24 @@
                                                                     </th>
                                                                 </tr>
                                                                <?php 
-                                                                $bulan1=2;
-                                                                $bulan2=2;
-                                                                $bulan3=2;
+                                                                }
+                                                                $bulan1=1;
+                                                                $bulan2=1;
+                                                                $bulan3=1;
                                                                 foreach ($data_2017 as $key ) {
+                                                                    $bulan1++;
+                                                                    $bulan2++;
+                                                                    $bulan3++;
+                                                                    if (count($key)>0) {
                                                                     ?>
                                                                     <tr>
                                                                         <th width="60">
-                                                                            <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2017_<?=$bulan1++?>" aria-expanded="false"><?=date("F", mktime(0, 0, 0, $bulan2++, 10))?>
+                                                                            <a class="accordion-toggle" data-toggle="collapse" data-target="#collapse2017_<?=$bulan1?>" aria-expanded="false"><?=date("F", mktime(0, 0, 0, $bulan2, 10))?>
                                                                             <span class="fa fa-plus-circle buka1"></span>
                                                                             <span class="fa fa-minus-circle tutup1"></span></a>
                                                                         </th>
                                                                         <th>
-                                                                            <div id="collapse2017_<?=$bulan3++?>" class="collapse">
+                                                                            <div id="collapse2017_<?=$bulan3?>" class="collapse">
                                                                                 <table class="table-bordered-collapse">
                                                                                     <?php
                                                                                     foreach ($key as $val) {
@@ -246,7 +259,7 @@
 
                                                                     </tr>
                                                                 <?php
-                                                                        
+                                                                    } 
                                                                 }
                                                                 ?>
 
@@ -329,4 +342,30 @@
         <!-- ============================================================== -->
         <!-- End Page Content -->
         <!-- ============================================================== -->
-        
+        <script type="text/javascript">
+            document.getElementById("olap").onchange = function()
+            {
+
+                if(this.value === "rawat_inap")
+                {
+                    document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>-Pilih-</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Dokter</option><option value='informasi3'>Asuransi</option><option value='informasi4'>Kamar</option><option value='informasi5'>Penyakit</option></select>";
+                    document.getElementById("submit").disabled=false;
+                }else if(this.value == "rawat_jalan")
+                {
+                    document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>-Pilih-</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Dokter</option><option value='informasi3'>Asuransi</option><option value='informasi4'>Kinik</option><option value='informasi5'>Penyakit</option></select>";
+                    document.getElementById("submit").disabled=false;
+                }else if(this.value == "penunjang_medis")
+                {
+                    document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>-Pilih-</option><option value='informasi1'>Jenis Kelamin</option><option value='informasi2'>Jenis Penunjang Medis</option><option value='informasi3'>Asuransi</option></select>";
+                    document.getElementById("submit").disabled=false;
+                }else if(this.value == "apotek")
+                {
+                    document.getElementById("informasi").innerHTML="<select class='form-control' name='informasi'><option value=''>-Pilih-</option><option value='informasi1'>Pelayan Medik</option></select>";
+                    document.getElementById("submit").disabled=false;
+                }else{
+                    
+                    document.getElementById("informasi").innerHTML="<select class='form-control' disabled><option value=''>-Pilih-</option></select>";
+                    document.getElementById("submit").disabled=true;
+                }
+            };
+        </script>

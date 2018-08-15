@@ -13,27 +13,36 @@ class MOlap_rawatjalan_asuransi extends CI_Model {
 
 	public function asuransi($tgl_masuk)
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$apr_labor_asuransi = $this->db->select('kategori AS id_asuransi, COUNT(kategori) AS jml_asuransi')
-	 					   ->join('asuransi','pasien.id_asuransi=asuransi.nama_asuransi')
+	 	$apr_labor_asuransi = $this->db2->select('kategori AS id_asuransi, COUNT(kategori) AS jml_asuransi')
+	 					   ->join('dim_asuransi','fact_rawat_jalan.id_asuransi=dim_asuransi.id_asuransi')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->like('tgl_masuk', $tgl_masuk)
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('kategori')
-	 					   ->get('pasien');
+	 					   ->get('fact_rawat_jalan');
 	  	return $apr_labor_asuransi;
 	}
 
-	public function chart_pasien($tgl_masuk) //chart pasien rawat jalan berdsrkan asuransi per bulan thn
+	public function chart_pasien() //chart pasien rawat inap berdsrkan asuransi per bulan thn
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('kategori AS id_asuransi, COUNT(kategori) AS jml')
-	 					   ->join('asuransi','pasien.id_asuransi=asuransi.nama_asuransi')
+	 	$query = $this->db2->select('kategori AS id_asuransi, COUNT(kategori) AS jml')
+	 					   ->join('dim_asuransi','fact_rawat_jalan.id_asuransi=dim_asuransi.id_asuransi')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
-	 					   ->like('tgl_masuk', $tgl_masuk)
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('kategori')
-	 					   ->get('pasien');
+	 					   ->get('fact_rawat_jalan');
 	  	if ($query->num_rows() >= 1) {
 			return $query;
 		} else {
@@ -42,12 +51,22 @@ class MOlap_rawatjalan_asuransi extends CI_Model {
 	}
 	// Total pasien 2016
 	public function all_pasien()
-	{	$jk = array('P', 'L');
-	 	$all_pasien = $this->db->select('COUNT(jenis_kelamin) AS all_pasien')
+	{	
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		$jk = array('P', 'L');
+	 	$all_pasien = $this->db2->select('COUNT(jenis_kelamin) AS all_pasien')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
-	 					   ->get('pasien');
-	  	return $all_pasien->row();
+	 					   ->get('fact_rawat_jalan');
+	  	if ($all_pasien->row()->all_pasien >= 1) {
+			return $all_pasien->row();
+		} else {
+			return false;
+		}
 	}
 
 } 

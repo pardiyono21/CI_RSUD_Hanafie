@@ -14,35 +14,54 @@ class MOlap_rawatjalan extends CI_Model {
 	
 	public function pasien_2016() //jumlah pasien perbulan thn 2016
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk,Count(*) as jml')
+	 	$query = $this->db2->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk,Count(*) as jml')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->like('tgl_masuk', '2016')
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('left(tgl_masuk,7)')
-	 					   ->get('pasien');
-	  	return $query;
+	 					   ->get('fact_rawat_jalan');
+	  	
+		return $query;
+		
 	}
 	public function pasien_2017() //jumlah pasien perbulan thn 2017
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk,Count(*) as jml')
+	 	$query = $this->db2->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk,Count(*) as jml')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->like('tgl_masuk', '2017')
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('left(tgl_masuk,7)')
-	 					   ->get('pasien');
-	  	return $query;
+	 					   ->get('fact_rawat_jalan');
+	  	
+		return $query;
+		
 	}
 	
-	public function chart_pasien() //chart pasien rawat jalanperbulan thn
+	public function chart_pasien() //chart pasien rawat inapperbulan thn
 	{
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
 		$jk = array('P', 'L');
-	 	$query = $this->db->select('DATE_FORMAT(tgl_masuk, "%b %Y") AS tgl_masuk,Count(*) as jml')
+	 	$query = $this->db2->select('DATE_FORMAT(tgl_masuk, "%b %Y") AS tgl_masuk,Count(*) as jml')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('left(tgl_masuk,7)')
-	 					   ->get('pasien');
+	 					   ->get('fact_rawat_jalan');
 	  	if ($query->num_rows() >= 1) {
 			return $query;
 		} else {
@@ -53,12 +72,22 @@ class MOlap_rawatjalan extends CI_Model {
 
 	// Total pasien 2016
 	public function all_pasien()
-	{	$jk = array('P', 'L');
-	 	$all_pasien = $this->db->select('COUNT(jenis_kelamin) AS all_pasien')
+	{	
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		$jk = array('P', 'L');
+	 	$all_pasien = $this->db2->select('COUNT(jenis_kelamin) AS all_pasien')
+	 					   ->join('dim_pasien','fact_rawat_jalan.id_pasien=dim_pasien.id_pasien')
 	 					   ->where('jenis_rawat','rawat jalan')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_kelamin', $jk)
-	 					   ->get('pasien');
-	  	return $all_pasien->row();
+	 					   ->get('fact_rawat_jalan');
+	  	if ($all_pasien->row()->all_pasien >= 1) {
+			return $all_pasien->row();
+		} else {
+			return false;
+		}
 	}
 
 } 

@@ -60,8 +60,20 @@ Page Content -->
                                          <!-- Proses ETL -->
                                         
                                             <form action="<?=base_url()?>adm_proses_etl/ekstrak" method="post">
-                                            <button type="submit" name="ekstrak" class="btn btn-danger" >Ekstrak <i class="fa fa-hand-o-right"></i> </button>
+                                            <button type="submit" name="ekstrak"  class="btn btn-danger " id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Ekstrak">Ekstrak</button>
+
+                                            <!-- <button type="submit" name="ekstrak" class="btn btn-danger" >Ekstrak <i class="fa fa-hand-o-right"></i> </button>
+                                             -->
                                             </form><br>
+                                            <script type="text/javascript">
+                                                $('.btn').on('click', function() {
+                                                    var $this = $(this);
+                                                  $this.button('loading');
+                                                    setTimeout(function() {
+                                                       $this.button('reset');
+                                                   }, 80000000000000000);
+                                                });
+                                            </script>
                                         
                                         
                                     </div>

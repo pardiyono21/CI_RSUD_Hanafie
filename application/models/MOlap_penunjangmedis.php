@@ -12,25 +12,41 @@ class MOlap_penunjangmedis extends CI_Model {
 	}
 
 	public function pasien()
-	{	$jk = array('P', 'L');
+	{	
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		$jk = array('P', 'L');
 		$jenis_rawat = array('laboratorium', 'radiologi');
-	 	$pasien = $this->db->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk, Count(*) as jml')
+	 	$pasien = $this->db2->select('DATE_FORMAT(tgl_masuk, "%b") AS tgl_masuk, Count(*) as jml')
+	 					   ->join('dim_pasien','fuct_penunjang_medis.id_pasien=dim_pasien.id_pasien')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_rawat', $jenis_rawat)
 	 					   ->where_in('jenis_kelamin', $jk)
 	 					   ->group_by('left(tgl_masuk,7)')
-	 					   ->get('pasien');
+	 					   ->get('fuct_penunjang_medis');
 	  	return $pasien;
 	}
 	
 	// Total pasien 2016
 	public function all_pasien()
-	{	$jk = array('P', 'L');
+	{	
+		$awal=$this->input->get('awal');
+		$akhir=$this->input->get('akhir');
+		$jk = array('P', 'L');
 		$jenis_rawat = array('laboratorium', 'radiologi');
-	 	$all_pasien = $this->db->select('COUNT(jenis_kelamin) AS all_pasien')
+	 	$all_pasien = $this->db2->select('COUNT(jenis_kelamin) AS all_pasien')
+	 					   ->join('dim_pasien','fuct_penunjang_medis.id_pasien=dim_pasien.id_pasien')
+	 					   ->where('tgl_masuk >=', $awal)
+						   ->where('tgl_masuk <=', $akhir)
 	 					   ->where_in('jenis_rawat', $jenis_rawat)
 	 					   ->where_in('jenis_kelamin', $jk)
-	 					   ->get('pasien');
-	  	return $all_pasien->row();
+	 					   ->get('fuct_penunjang_medis');
+	  	if ($all_pasien->row()->all_pasien >= 1) {
+			return $all_pasien->row();
+		} else {
+			return false;
+		}
 	}
 
 } 
